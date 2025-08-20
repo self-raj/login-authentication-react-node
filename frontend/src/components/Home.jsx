@@ -2,7 +2,9 @@ import React from 'react'
 
 function Home() {
   return (
-    <div>H</div>
+    <div className='bg-red-500  rounded shadow'>
+      <h1>Home</h1>
+    </div>
   )
 }
 

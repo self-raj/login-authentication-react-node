@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import { axiosInstance, LOGIN } from '../config/apiConfig'; // ✅ Import
+import { axiosInstance, LOGIN } from '../config/apiConfig';
+
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -13,10 +14,8 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await axiosInstance.post(LOGIN, { email, password });
-      
       alert(res.data.message);
       navigate('/dashboard');
-    
     } catch (err) {
       alert(err.response?.data?.message || 'Login failed');
     }

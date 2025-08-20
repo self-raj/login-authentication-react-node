@@ -1,85 +1,78 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { FaBook, FaQuestionCircle, FaSignOutAlt } from 'react-icons/fa';
-import { LuLayoutDashboard } from 'react-icons/lu';
-import { MdContactMail } from 'react-icons/md';
-import { motion } from 'framer-motion';
-import { PiNewspaperClipping } from 'react-icons/pi';
-import { RiNotification2Line } from 'react-icons/ri';
-import { FaCalendarAlt } from 'react-icons/fa';
-import axios from 'axios';
-const navItems = [
-  { label: 'Dashboard', icon: <LuLayoutDashboard />, path: '/dashboard' },
-  { label: 'Add Courses', icon: <FaBook />, path: '/add-course' },
-  { label: 'News', icon: <PiNewspaperClipping />, path: '/news' },
-  { label: 'Notices', icon: <RiNotification2Line />, path: '/notices' },
-  { label: 'Event', icon: <FaCalendarAlt />, path: '/academic-events' },
-  { label: 'Contact', icon: <MdContactMail />, path: '/update-contact' },
-  { label: 'Testimonial', icon: <FaQuestionCircle />, path: '/testimonial' },
-];
+import React, { useState } from "react";
+import { NavLink, Outlet } from "react-router-dom";
+import { 
+  FaHome, FaPhone, FaDollarSign, FaEye, 
+  FaInfoCircle, FaUpload, FaImages, FaSignOutAlt 
+} from "react-icons/fa";
 
-const Sidebar = () => {
+export default function Sidebar() {
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleLogout = async () => {
-    try {
-      await axios.get('http://localhost:8080/logout', { withCredentials: true });
-      localStorage.clear(); // If using localStorage for auth flags
-      window.location.href = '/'; // Or use `navigate('/')` if inside a component
-    } catch (err) {
-      console.error("Logout error:", err);
-      alert("Logout failed. Try again.");
-    }
-  };
+  const linkClass = ({ isActive }) =>
+    isActive
+      ? "flex items-center gap-3 bg-gray-900 text-white p-3 rounded"
+      : "flex items-center gap-3 text-gray-300 hover:bg-gray-700 p-3 rounded";
 
   return (
-    <motion.div
-      initial={{ x: -100 }}
-      animate={{ x: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-64 bg-gray-900 shadow-md p-4 min-h-screen"
-    >
-      <div className="flex justify-center mb-6">
-        <img
-          src="/Photo.png"
-          alt="Logo"
-          className="w-20 h-20 rounded-full object-cover border-4 border-blue-500"
-        />
+    <div className="flex w-full h-screen bg-gray-100">
+      {/* Sidebar */}
+      <div
+        className={`bg-gray-800 text-white w-64 p-5 space-y-6 h-full 
+          ${isOpen ? "translate-x-0" : "-translate-x-full"} 
+          md:translate-x-0 transition-transform duration-300 ease-in-out z-50 fixed md:relative`}
+        style={{ top: 0, left: 0, height: "100vh" }}
+      >
+        <h2 className="text-2xl font-bold text-center mb-6">Admin Panel</h2>
+        <nav className="flex flex-col space-y-2">
+          <NavLink to="home" className={linkClass} onClick={() => setIsOpen(false)}>
+            <FaHome /> Home
+          </NavLink>
+          <NavLink to="contact" className={linkClass} onClick={() => setIsOpen(false)}>
+            <FaPhone /> Contact
+          </NavLink>
+          <NavLink to="pricing" className={linkClass} onClick={() => setIsOpen(false)}>
+            <FaDollarSign /> Pricing
+          </NavLink>
+          <NavLink to="our_vision" className={linkClass} onClick={() => setIsOpen(false)}>
+            <FaEye /> Our Vision
+          </NavLink>
+          <NavLink to="about" className={linkClass} onClick={() => setIsOpen(false)}>
+            <FaInfoCircle /> About
+          </NavLink>
+          <NavLink to="gallery" className={linkClass} onClick={() => setIsOpen(false)}>
+            <FaUpload /> Gallery
+          </NavLink>
+          <NavLink to="all-images" className={linkClass} onClick={() => setIsOpen(false)}>
+            <FaImages /> All Images
+          </NavLink>
+
+          <button
+            className="flex items-center gap-3 bg-red-500 hover:bg-red-600 p-3 rounded text-white mt-4"
+          >
+            <FaSignOutAlt /> Logout
+          </button>
+        </nav>
       </div>
 
-      <nav className="space-y-4 text-gray-300 text-[17px] font-medium">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.label}
-            to={item.path}
-            className={({ isActive }) =>
-              `group flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 ease-in-out transform cursor-pointer relative overflow-hidden
-              ${isActive ? 'bg-blue-600 text-white scale-105' : 'hover:text-blue-400 hover:scale-[1.02]'}`
-            }
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Top Bar for Mobile */}
+        <div className="bg-gray-800 text-white p-4 flex items-center md:hidden">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="px-3 py-2 bg-gray-700 rounded-md"
           >
-            {/* Active indicator bar */}
-            {({ isActive }) =>
-              isActive && (
-                <motion.span
-                  layoutId="active-pill"
-                  className="absolute left-0 top-0 h-full w-1 bg-blue-400 rounded-r"
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                />
-              )
-            }
-            {item.icon} {item.label}
-          </NavLink>
-        ))}
-
-        <div
-          onClick={handleLogout}
-          className="flex items-center gap-3 px-3 py-2 mt-8 rounded-lg text-red-400 hover:text-red-500 cursor-pointer transition-all"
-        >
-          <FaSignOutAlt /> Log Out
+            ☰ Menu
+          </button>
+          <h1 className="ml-4 font-bold">Dashboard</h1>
         </div>
 
-      </nav>
-    </motion.div>
+        {/* Page Content */}
+        <div className="p-0">
+          <Outlet /> {/* 👈 Yaha child pages render honge */}
+        </div>
+      </div>
+    </div>
   );
-};
+}
 
-export default Sidebar;

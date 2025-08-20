@@ -15,10 +15,10 @@ export const axiosInstance = axios.create({
 });
 
 // ✅ Course APIs
-export const COURSE_BASE = `${baseURL}/api/courses`;
-export const SINGLE_COURSE = (courseName, courseId) => `${baseURL}/api/course/${courseName}/${courseId}`;
-export const COURSE_PDF = (courseName, courseId) => `${baseURL}/api/course/pdf/${courseName}/${courseId}`;
-export const DELETE_COURSE = (courseName, id) => `${baseURL}/api/courses/${courseName}/${id}`;
+// export const COURSE_BASE = `${baseURL}/api/courses`;
+// export const SINGLE_COURSE = (courseName, courseId) => `${baseURL}/api/course/${courseName}/${courseId}`;
+// export const COURSE_PDF = (courseName, courseId) => `${baseURL}/api/course/pdf/${courseName}/${courseId}`;
+// export const DELETE_COURSE = (courseName, id) => `${baseURL}/api/courses/${courseName}/${id}`;
 
 // ✅ User Auth APIs
 export const SIGNUP = `${baseURL}/signup`;
